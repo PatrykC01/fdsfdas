@@ -1,0 +1,63 @@
+using System;
+
+// Interfejs Strategii
+public interface IDeliveryStrategy
+{
+    void Deliver();
+}
+
+// Konkretne strategie dostawy
+public class PickupStrategy : IDeliveryStrategy
+{
+    public void Deliver()
+    {
+        Console.WriteLine("Odbiór osobisty");
+    }
+}
+
+public class HomeDeliveryStrategy : IDeliveryStrategy
+{
+    public void Deliver()
+    {
+        Console.WriteLine("Dostawa do domu");
+    }
+}
+
+public class Restaurant
+{
+    private IDeliveryStrategy _deliveryStrategy;
+
+    public Restaurant(IDeliveryStrategy deliveryStrategy)
+    {
+        _deliveryStrategy = deliveryStrategy;
+    }
+
+    public void SetDeliveryStrategy(IDeliveryStrategy deliveryStrategy)
+    {
+        _deliveryStrategy = deliveryStrategy;
+    }
+
+    public void TakeOrder()
+    {
+        Console.WriteLine("Zamówienie przyjęte. Metoda dostawy:");
+        _deliveryStrategy.Deliver();
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Tworzymy restaurację
+        Restaurant restaurant = new Restaurant(new PickupStrategy());
+
+        // Składamy zamówienie z odbiorem osobistym
+        restaurant.TakeOrder();
+
+        // Zmieniamy metodę dostawy na dostawę do domu
+        restaurant.SetDeliveryStrategy(new HomeDeliveryStrategy());
+
+        // Składamy kolejne zamówienie z dostawą do domu
+        restaurant.TakeOrder();
+    }
+}
